@@ -1,0 +1,25 @@
+{% extends "CPANA\HierarchyBundle::layout.html.twig"%}
+
+{% form_theme form 'CPANA\HierarchyBundle:Form:bootstrap_3_layout.html.twig' %}
+
+{% block content %}
+    
+	{% if message is defined %}
+		<h3>{{ message }}</h3>
+	{% else %}
+	
+		<div class="row">
+			<div class="col-sm-4">
+				<h3>Create new user</h3>
+			  
+				{{ form_start(form) }}
+					{{ form_errors(form) }}
+					{{ form_row(form.user_identification) }}
+			   {{ form_end(form) }}
+			</div>
+		</div>
+		
+    {% endif %}
+{% endblock %}
+    
+    

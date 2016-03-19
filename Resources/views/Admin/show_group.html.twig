@@ -1,0 +1,79 @@
+{% extends "CPANA\HierarchyBundle::layout.html.twig"%}
+
+{% block content %}
+
+
+    {% set text = "" %}
+	
+    {% for g in groups_hierarchy %}
+	
+		{% if g is not null %}
+		
+			{% set text = text  ~ '<a href=' ~ path('ghm_admin_show_group', {'node_id':g.getId()})  ~ '>'~ g.getProperty(defaultPropertyGroup) ~ '</a>' ~ ' > ' %}
+			
+		{% endif %}
+
+    {% endfor %}
+
+		
+	{{  text|raw }}
+	<hr>
+	<h3>Group</h3>
+		<p> 
+			<b> Group name : </b> {{ node.getProperty(defaultPropertyGroup) }}
+			<a href="{{ path('ghm_admin_edit_group_properties', {'groupId': node.getId() }) }}" class="btn btn-info" role="button">Edit properties</a>
+			
+		</p>
+		
+		{% if part_of_group is defined and part_of_group is not null %}
+			<p>
+				<b>Part of group: </b><a href= "{{ path('ghm_admin_show_group', {'node_id':part_of_group.getId()}) }}">{{ part_of_group.getProperty(defaultPropertyGroup) }}</a>
+				
+				<a href="{{ path('ghm_admin_delete_group_relation', {'startId':node.getId(),'endId':part_of_group.getId}) }}" class="btn btn-danger" role="button">Delete relation</a>
+			</p>
+		{% else %}
+		    <p>This group does not belong to any group!</p>
+			<a href="{{ path('ghm_admin_create_group_relation', {'groupId':node.getId() })}}" class="btn btn-info" role="button">Create new relation</a>
+		{% endif %}
+		<p>
+		    <b> Neo4j Id </b>{{ node.getId() }}
+			<a href="{{ path('ghm_admin_delete_group', {'groupId': node.getId() }) }}" class="btn btn-danger" role="button">Delete group</a>
+		</p>
+	<hr>
+	
+	<h4>Members</h4>
+	{% if managers|length >0 %}
+		{% for manager in managers %}
+			<p>
+				<a href="{{ path('ghm_admin_show_user', {'node_id':manager.getId()}) }}">{{ manager.getProperty(defaultPropertyUser) }}</a> - Manager
+				<a href="{{ path('ghm_admin_edit_relation', {'startId':manager.getId(), 'endId': node.getId() }) }}" class="btn btn-info" role="button">Edit relation property</a>
+			    <a href="{{ path('ghm_admin_delete_user_group_relation', {'startId':manager.getId(), 'endId':node.getId() })}}" class="btn btn-danger" role="button">Delete relation</a>
+			</p>
+		{% endfor %}
+	{% else %}
+	<p><b>This group contains no manager!</b></p>
+		
+	{% endif %}
+	
+	{% if user_members|length >0 %}
+		{% for user in user_members %}
+			<p>
+				<a href="{{ path('ghm_admin_show_user', {'node_id':user.getId()}) }}">{{ user.getProperty(defaultPropertyUser) }}</a> - User
+				<a href="{{ path('ghm_admin_edit_relation', {'startId':user.getId(), 'endId': node.getId() }) }}" class="btn btn-info" role="button">Edit relation property</a>
+			    <a href="{{ path('ghm_admin_delete_user_group_relation', {'startId':user.getId(), 'endId':node.getId() })}}" class="btn btn-danger" role="button">Delete relation</a>
+			</p>
+		{% endfor %}
+	{% endif %}
+	
+	<h4>Groups subordinated</h4>
+	{% if groups_members|length >0 %}
+		{% for group in groups_members %}
+			<p><a href="{{ path('ghm_admin_delete_group_group_relation', {'startId':group.getId(), 'endId':node.getId() })}}" class="btn btn-danger" role="button">Delete relation</a>
+			<a href="{{ path('ghm_admin_show_group', {'node_id':group.getId()}) }}">{{ group.getProperty(defaultPropertyGroup) }}</a>
+			</p>
+		{% endfor %}
+	{% endif %}
+		
+{% endblock %}
+    
+    

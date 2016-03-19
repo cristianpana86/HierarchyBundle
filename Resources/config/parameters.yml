@@ -1,0 +1,13 @@
+parameters:
+    neo4j_user:
+    neo4j_password:
+    default_relation_type: 
+    def_rel_type_group_to_group: 
+    def_rel_type_user_to_group: 
+    root_group_id:
+    manager_role_property:
+    default_property_group: 
+    default_property_user:
+
+
+

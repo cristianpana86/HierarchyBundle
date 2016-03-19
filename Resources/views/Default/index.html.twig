@@ -1,0 +1,50 @@
+{% extends "CPANA\HierarchyBundle::layout.html.twig"%}
+
+{% form_theme form 'CPANA\HierarchyBundle:Form:bootstrap_3_layout.html.twig' %}
+{% form_theme form_g 'CPANA\HierarchyBundle:Form:bootstrap_3_layout.html.twig' %}
+
+{% block content %}
+
+	<div>
+		{{ form_start(form) }}
+			{{ form_errors(form) }}
+			{{ form_row(form.search) }}
+		{{ form_end(form) }}
+		
+		{% if message is defined %}
+			<hr>
+			<h3 style="color:red;" >{{ message  }} </h3>
+		{% endif %}
+	</div>
+	
+	<div>
+		{{ form_start(form_g) }}
+			{{ form_errors(form_g) }}
+			{{ form_row(form_g.search) }}
+		{{ form_end(form_g) }}
+		
+		{% if message_g is defined %}
+			<hr>
+			<h3 style="color:red;" >{{ message_g  }} </h3>
+		{% endif %}
+	</div>
+
+	{% if rows is defined %}
+        <h3>Search results</h3>
+		{% for row in rows %}
+	        <hr>
+		    <p><a href="{{ path('ghm_show_user', {'node_id': row.current().getId() }) }}">{{ row.current().getProperty(default_value_user)  }}</a></p> 
+        {% endfor %}
+		
+	{% endif %}
+	
+	{% if rows_g is defined %}
+        <h3>Search results</h3>
+		{% for row in rows_g %}
+	        <hr>
+		    <p><a href="{{ path('ghm_show_group', {'node_id': row.current().getId() }) }}">{{ row.current().getProperty(default_value_group)  }}</a></p> 
+        {% endfor %}
+		
+	{% endif %}
+	
+{% endblock %}

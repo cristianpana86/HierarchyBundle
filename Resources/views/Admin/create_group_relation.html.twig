@@ -1,0 +1,37 @@
+{% extends "CPANA\HierarchyBundle::layout.html.twig"%}
+
+{% form_theme form 'CPANA\HierarchyBundle:Form:bootstrap_3_layout.html.twig' %}
+
+{% block content %}
+
+<div class="container">
+  <h3>Create relation:</h3>
+  <h2>Origin node: <b style="color:red"> {{ groupOrigin.getProperty(display_value_group) }}</b></h2>
+  <h2>Relation type:<b style="color:red"> PART_OF</b></h2>
+  <h2>Please select end node:</h2>
+
+
+		{{ form_start(form) }}
+			{{ form_errors(form) }}
+			{{ form_row(form.search) }}
+		{{ form_end(form) }}
+		
+		{% if message is defined %}
+			<hr>
+			<h3 style="color:red;" >{{ message  }} </h3>
+		{% endif %}
+
+
+	{% if rows is defined and rows is not null %}
+
+        <h3>Search results</h3>
+		{% for row in rows %}
+	        <hr>
+		    <p><a href="{{ path('ghm_admin_save_group_relation', {'start_id': groupOrigin.getId(),'end_id': row.current().getId() }) }}">{{ row.current().getProperty('label')  }}</a></p> 
+        {% endfor %}
+		
+	{% endif %}
+	
+	
+</div>
+{% endblock %}

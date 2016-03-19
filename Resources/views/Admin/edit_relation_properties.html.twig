@@ -1,0 +1,17 @@
+{% extends "CPANA\HierarchyBundle::layout.html.twig"%}
+
+
+{% block content %}
+
+
+
+    {% if message is defined %}
+		<h3>{{ message }}</h3>
+		<p><a href="{{ path('ghm_admin_show_group',{'node_id': node.getId()}) }}">Go back to group</a></p>
+    {% else %}
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		{{ form_end(form) }}
+	
+   {% endif %}
+{% endblock %}

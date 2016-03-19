@@ -1,0 +1,99 @@
+{% extends "CPANA\HierarchyBundle::layout.html.twig"%}
+
+{% block content %}
+
+	{% set text = "" %}
+    {% for m in all_managers %}
+	
+		{% if m is not null %}
+		
+			{% set text = text  ~ '<a href=' ~ path('ghm_show_user', {'node_id':m.getId()})  ~ '>'~ m.getProperty(defaultPropertyUser) ~ '</a>' ~ ' > ' %}
+			
+		{% endif %}
+
+    {% endfor %}
+
+		
+	{{  text|raw }}
+	
+	<hr>
+	
+	{% set text2 = "" %}
+	
+    {% for g in groups_hierarchy %}
+	
+		{% if g is not null %}
+		
+			{% set text2 = text2  ~ '<a href=' ~ path('ghm_show_group', {'node_id':g.getId()})  ~ '>'~ g.getProperty(defaultPropertyGroup) ~ '</a>' ~ ' > ' %}
+			
+		{% endif %}
+
+    {% endfor %}
+
+		
+	{{  text2|raw }}
+
+	<h3>User</h3>
+	
+	{% for key, property in node.getProperties() %}
+		<p><b>{{ key|capitalize  }} </b>: {{ property }}</p>
+	{% endfor %}
+		
+	{% if current_group is not null %}
+		<p><b>Member of group : </b><a href="{{ path('ghm_show_group', {'node_id':current_group.getId()}) }}">{{ current_group.getProperty(defaultPropertyGroup) }}</a></p>
+		
+	{% else %}
+	
+	<p><b>This user does not belong to any group!</b></p>
+		
+	{% endif %}
+	<hr>
+	
+	<h3>Manager</h3>
+	{% if manager is not null %}
+		<p><a href="{{ path('ghm_show_user', {'node_id':manager.getId()}) }}">{{ manager.getProperty(defaultPropertyUser) }}</a></p>
+	{% else %}
+	<p><b>This user has no manager!</b></p>
+		
+	{% endif %}
+
+    <h3>Peers</h3>
+	{% if peers is not null %}
+		{% for peer in peers %}
+			{% set user = peer.current() %}
+			<p><a href="{{ path('ghm_show_user', {'node_id':user.getId()}) }}">{{ user.getProperty(defaultPropertyUser) }}</a></p>
+		{% endfor %}
+	{% else %}
+		<p><b>This user has no peers!</b></p>
+		
+	{% endif %}
+		
+	<h3>Directs (Groups and/or Users)</h3>
+	<h5>Users:</h5>
+	{% if directs_users is not null %}
+	
+		{% for row in directs_users %}
+			{% set user = row.current() %}
+			<p><a href="{{ path('ghm_show_user', {'node_id':user.getId()}) }}">{{ user.getProperty(defaultPropertyUser) }}</a></p>
+		{% endfor %}
+	{% else %}
+		<p><b>This user has no directs users!</b></p>
+		
+	{% endif %}
+	
+	<h5>Groups:</h5>
+	
+	{% if directs_groups is not null %}
+
+		{% for row in directs_groups %}
+			{% set group = row.current() %}
+			<p><a href="{{ path('ghm_show_group', {'node_id':group.getId()}) }}">{{ group.getProperty(defaultPropertyGroup) }}</a></p>
+		{% endfor %}
+	{% else %}
+		<p><b>This user has no directs groups!</b></p>
+		
+	{% endif %}
+		
+{% endblock %}
+    
+    

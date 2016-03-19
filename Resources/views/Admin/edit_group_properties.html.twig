@@ -1,0 +1,16 @@
+{% extends "CPANA\HierarchyBundle::layout.html.twig"%}
+
+
+{% block content %}
+
+
+
+    {% if message is defined %}
+		<h3>{{ message }}</h3>
+    {% else %}
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		{{ form_end(form) }}
+	
+   {% endif %}
+{% endblock %}
