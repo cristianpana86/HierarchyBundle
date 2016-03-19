@@ -5,6 +5,8 @@ This Symfony bundle manages a company hierarchy retrieving and stroring informat
 The hierarchy is based on groups: PHP group is member of Software Developement group, which is member of IT, etc.
 The users are members of these groups having differend kind of roles (manager, employee etc).
 
+HierarchyBundle comes with a front where regular user can just browse data, and an Admin area from where you can create, edit, delete info. 
+
 I got the idea for this bundle from the Neo4j documentation: http://neo4j.com/docs/stable/examples-user-roles-in-graphs.html
 HierarchyBundle is using the Neo4jPHP library https://github.com/jadell/neo4jphp
 
