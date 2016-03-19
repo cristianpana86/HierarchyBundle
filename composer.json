@@ -1,0 +1,22 @@
+{
+    "name": "cpana/hierarchybundle",
+    "type": "symfony-bundle",
+    "description": "Hierarchy management with Neo4j and Symfony",
+    "keywords": ["Symfony", "code generation"],
+    "homepage": "https://github.com/cristianpana86/",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Cristian Pana",
+            "email": "cristianpana86@yahoo.com"  
+        }
+    ],
+    "require": {
+        "everyman/neo4jphp": "dev-master",
+        "php": ">=5.3.0",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": { "CPANA\\HierarchyBundle\\": "" }
+    }
+}
