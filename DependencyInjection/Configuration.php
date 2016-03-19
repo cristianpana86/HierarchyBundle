@@ -23,6 +23,22 @@ class Configuration implements ConfigurationInterface
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
+        $rootNode
+            ->children()
+			  ->arrayNode('group_hierarchy_manager_neo4j')
+                    ->children()
+						->scalarNode('neo4j_user')->defaultValue('')->end()
+						->scalarNode('neo4j_password')->defaultValue('')->end()
+						->scalarNode('def_rel_type_group_to_group')->defaultValue('')->end()
+						->scalarNode('def_rel_type_user_to_group')->defaultValue('')->end()
+						->scalarNode('root_group_id')->defaultValue('')->end()
+						->scalarNode('manager_role_property')->defaultValue('')->end()
+						->scalarNode('default_property_group')->defaultValue('')->end()
+						->scalarNode('default_property_user')->defaultTrue()->end()
+				    ->end()
+                ->end() // group_hierarchy_manager_neo4j
+            ->end()
+            ;
 
         return $treeBuilder;
     }
