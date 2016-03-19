@@ -24,7 +24,7 @@ class CPANAHierarchyExtension extends Extension
         
         if (!empty($config['group_hierarchy_manager_neo4j'])) {
             foreach ($config['group_hierarchy_manager_neo4j'] as $key => $value) {
-				$container->setParameter($key, $value);
+		$container->setParameter($key, $value);
             }
         }
 
