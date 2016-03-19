@@ -2,7 +2,7 @@
     "name": "cpana/hierarchybundle",
     "type": "symfony-bundle",
     "description": "Hierarchy management with Neo4j and Symfony",
-    "keywords": ["Symfony", "code generation"],
+    "keywords": ["Symfony", "Neo4j"],
     "homepage": "https://github.com/cristianpana86/",
     "license": "LGPL-3.0+",
     "authors": [
