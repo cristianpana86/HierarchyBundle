@@ -48,7 +48,8 @@ You need to specify which is the root group node of your hierarchy by prodiving 
 
 	php app/console assets:install
 
-In your browser type your project path and add app_dev.php/h/home
+In your browser type your project path and add **app_dev.php/h/admin/home**. If you are using the sample data provided in the Wiki https://github.com/cristianpana86/HierarchyBundle/wiki/Sample-data search for user Peter, you should see something like this:
 
+![admin](https://1.bp.blogspot.com/-8jK5fy3mgz8/Vu7aMfthDMI/AAAAAAAACWk/Wwh552iscncaBgbIxpkoO-8xwktElqpIQ/s640/admin_peter.PNG)
 
 
