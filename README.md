@@ -14,15 +14,15 @@ HierarchyBundle is using the Neo4jPHP library https://github.com/jadell/neo4jphp
 Installation
 --------------------
 
-Using composer:
+**Use composer**:
 
 	composer require cpana/hierarchybundle
 
-Register the bundle in AppKernel:
+**Register the bundle in AppKernel**:
 
 	new CPANA\HierarchyBundle\CPANAHierarchyBundle(),
 
-Add your parameters to app/config/config.yml:
+**Add your parameters to app/config/config.yml**:
 
 	cpana_hierarchy:
 		group_hierarchy_manager_neo4j:
@@ -37,14 +37,14 @@ Add your parameters to app/config/config.yml:
 
 You need to specify which is the root group node of your hierarchy by prodiving the Neo4j Id of that node in parameter "root_group_id".
 
-Import routes to app/config/routing.yml:
+**Import routes to app/config/routing.yml**:
 
 	cpana_hierarchy:
 		resource: "@CPANAHierarchyBundle/Controller/"
 		prefix:   /h
 		type:     annotation
 
-Install assets:
+**Install assets**:
 
 	php app/console assets:install
 
