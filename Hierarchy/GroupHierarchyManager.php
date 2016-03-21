@@ -83,7 +83,8 @@ class GroupHierarchyManager
                                 $managerRole,
                                 $defaultPropertyGroup,
                                 $defaultPropertyUser
-                                ) {
+                                ) 
+    {
         $this->client = new Client();
         $this->client->getTransport()->setAuth($user, $password);
 
