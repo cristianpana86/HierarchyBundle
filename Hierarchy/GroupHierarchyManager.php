@@ -6,140 +6,141 @@ use Everyman\Neo4j\Client;
 use Everyman\Neo4j\Node;
 use Everyman\Neo4j\Cypher\Query;
 use Everyman\Neo4j\Relationship;
-use Everyman\Neo4j\Query\ResultSet;
-
 
 /**
  * This class contains a series of functions for manipulating group based hierachies
- * It is built on top of Everyman\Neo4j\ library
+ * It is built on top of Everyman\Neo4j\ library.
  *
  * @author Cristian Pana  <cristianpana86@yahoo.com>
  */
 class GroupHierarchyManager
 {
-	/**
+    /**
      * @var Everyman\Neo4j\Client
      */
     private $client;
-	
-	/**
-	 * Exaple:  PART_OF, group N--PART_OF--> group X
-     * @var string
-     */	
-    private $defRelTypeGroupToGroup;
-	
-	/**
-	 * Exaple:  MEMBER_OF, user N--MEMBER_OF--> group X
-     * @var string
-     */	
-    private $defRelTypeUserToGroup;
-	
-	
-	/**
-	 * Neo4j id of the hierarchy root node
-     * @var string
-     */	
-    private $rootGroupId;
-	
-    /**
-	 * Value for property "role" of the default user-group when the user is manager of given group
-     * @var string
-     */	
-    private $managerRole; 
-	
-    /**
-	 * Default Property of Group which is displayed now in views. Should represent the name of the group.
-     * @var string
-     */                                     
-    public $defaultPropertyGroup;
-	
-	/**
-	 * Default Property of User which is displayed now in views. Should represent the name of the user.
-     * @var string
-     */    
-    public $defaultPropertyUser;
-	
 
-	/**
-	 * Constructor
-	 *
-	 * @param string   $user
-	 * @param string   $password
-	 * @param string   $defRelTypeGroupToGroup
-	 * @param string   $defRelTypeUserToGroup
-	 * @param string   $rootGroupId
-	 * @param string   $managerRole
-	 * @param string   $defaultPropertyGroup
-	 * @param string   $defaultPropertyUser
-	 */
+    /**
+     * Exaple:  PART_OF, group N--PART_OF--> group X.
+     *
+     * @var string
+     */
+    private $defRelTypeGroupToGroup;
+
+    /**
+     * Exaple:  MEMBER_OF, user N--MEMBER_OF--> group X.
+     *
+     * @var string
+     */
+    private $defRelTypeUserToGroup;
+
+    /**
+     * Neo4j id of the hierarchy root node.
+     *
+     * @var string
+     */
+    private $rootGroupId;
+
+    /**
+     * Value for property "role" of the default user-group when the user is manager of given group.
+     *
+     * @var string
+     */
+    private $managerRole;
+
+    /**
+     * Default Property of Group which is displayed now in views. Should represent the name of the group.
+     *
+     * @var string
+     */
+    public $defaultPropertyGroup;
+
+    /**
+     * Default Property of User which is displayed now in views. Should represent the name of the user.
+     *
+     * @var string
+     */
+    public $defaultPropertyUser;
+
+    /**
+     * Constructor.
+     *
+     * @param string $user
+     * @param string $password
+     * @param string $defRelTypeGroupToGroup
+     * @param string $defRelTypeUserToGroup
+     * @param string $rootGroupId
+     * @param string $managerRole
+     * @param string $defaultPropertyGroup
+     * @param string $defaultPropertyUser
+     */
     public function __construct(
                                 $user,
                                 $password,
                                 $defRelTypeGroupToGroup,
                                 $defRelTypeUserToGroup,
-								$rootGroupId,
-								$managerRole,
-								$defaultPropertyGroup,
-								$defaultPropertyUser
-                                ) 
-	{
+                                $rootGroupId,
+                                $managerRole,
+                                $defaultPropertyGroup,
+                                $defaultPropertyUser
+                                ) {
         $this->client = new Client();
         $this->client->getTransport()->setAuth($user, $password);
 
         $this->defRelTypeGroupToGroup = $defRelTypeGroupToGroup;
         $this->defRelTypeUserToGroup = $defRelTypeUserToGroup;
-		$this->rootGroupId  = $rootGroupId;
-		$this->managerRole  = $managerRole;
-		$this->defaultPropertyGroup = $defaultPropertyGroup;
-		$this->defaultPropertyUser  = $defaultPropertyUser;
-
+        $this->rootGroupId = $rootGroupId;
+        $this->managerRole = $managerRole;
+        $this->defaultPropertyGroup = $defaultPropertyGroup;
+        $this->defaultPropertyUser = $defaultPropertyUser;
     }
-	/**
-	 * @return Everyman\Neo4j\Client
-	 */
+    /**
+     * @return Everyman\Neo4j\Client
+     */
     public function getClient()
     {
         return $this->client;
     }
-	
-	/**
-	 * @return string
-	 */
+
+    /**
+     * @return string
+     */
     public function getDefaultPropertyUser()
     {
         return $this->defaultPropertyUser;
     }
-	
-	/**
-	 * @return string
-	 */
+
+    /**
+     * @return string
+     */
     public function getDefaultPropertyGroup()
     {
         return $this->defaultPropertyGroup;
     }
-	
-	/**
-	 * @return string
-	 */
-	public function getDefRelTypeGroupToGroup()
+
+    /**
+     * @return string
+     */
+    public function getDefRelTypeGroupToGroup()
     {
         return $this->defRelTypeGroupToGroup;
     }
-	
-	/**
-	 * @return string
-	 */
-	public function getDefRelTypeUserToGroup()
+
+    /**
+     * @return string
+     */
+    public function getDefRelTypeUserToGroup()
     {
         return $this->defRelTypeUserToGroup;
     }
 
     /**
-	 * Return the hierarchy of managers above one user node
-	 *
-	 * @param  Everyman\Neo4j\Node   node
-	 * @return array
-	 */
+     * Return the hierarchy of managers above one user node.
+     *
+     * @param  Everyman\Neo4j\Node   node
+     *
+     * @return array
+     */
     public function getManagersHierarchyAboveUser($node)
     {
         $all_groupes_above = $this->getGroupHierarchyOfUser($node);
@@ -153,11 +154,12 @@ class GroupHierarchyManager
     }
 
     /**
-	 * Return the hierarchy of of groups above one group node
-	 *
-	 * @param  Everyman\Neo4j\Node   group_node
-	 * @return row| null
-	 */
+     * Return the hierarchy of of groups above one group node.
+     *
+     * @param  Everyman\Neo4j\Node   group_node
+     *
+     * @return row| null
+     */
     public function getGroupHierarchyOfGroup($group_node)
     {
         $id = $group_node->getId();
@@ -178,11 +180,12 @@ class GroupHierarchyManager
     }
 
     /**
-	 * Return the hierarchy of of groups above one user node
-	 *
-	 * @param  Everyman\Neo4j\Node   node
-	 * @return row| null
-	 */
+     * Return the hierarchy of of groups above one user node.
+     *
+     * @param  Everyman\Neo4j\Node   node
+     *
+     * @return row| null
+     */
     public function getGroupHierarchyOfUser($node)
     {
         $id = $node->getId();
@@ -204,12 +207,13 @@ class GroupHierarchyManager
         }
     }
 
-	/**
-	 * Get manager of the given Group Node (just one manager even if there are move than one!!!)
-	 *
-	 * @param  Everyman\Neo4j\Node   group_node
-	 * @return Everyman\Neo4j\Query\Row | null
-	 */
+    /**
+     * Get manager of the given Group Node (just one manager even if there are move than one!!!).
+     *
+     * @param  Everyman\Neo4j\Node   group_node
+     *
+     * @return Everyman\Neo4j\Query\Row | null
+     */
     public function getManagerOfGroupNode($group_node)
     {
         $id = $group_node->getId();
@@ -228,12 +232,13 @@ class GroupHierarchyManager
         }
     }
 
-	/**
-	 * Get peers of user (users with same role, in relation with same group)
-	 *
-	 * @param  Everyman\Neo4j\Node   user_node
-	 * @return Everyman\Neo4j\Query\ResultSet | null
-	 */
+    /**
+     * Get peers of user (users with same role, in relation with same group).
+     *
+     * @param  Everyman\Neo4j\Node   user_node
+     *
+     * @return Everyman\Neo4j\Query\ResultSet | null
+     */
     public function getPeersOfUser($user_node)
     {
         $id = $user_node->getId();
@@ -256,12 +261,13 @@ class GroupHierarchyManager
         }
     }
 
-	/**
-	 * Returns True if user has outgoing relation with property equal to manager ($managerRole)
-	 *
-	 * @param  Everyman\Neo4j\Node   user_node
-	 * @return boolean
-	 */
+    /**
+     * Returns True if user has outgoing relation with property equal to manager ($managerRole).
+     *
+     * @param  Everyman\Neo4j\Node   user_node
+     *
+     * @return bool
+     */
     public function isUserManager($user_node)
     {
         $id = $user_node->getId();
@@ -282,12 +288,13 @@ class GroupHierarchyManager
         return $is_manager;
     }
 
-	/**
-	 * Get direct subordinates of user. The user should have role manager (isUserManager)
-	 *
-	 * @param  Everyman\Neo4j\Node   user_node
-	 * @return row| null
-	 */
+    /**
+     * Get direct subordinates of user. The user should have role manager (isUserManager).
+     *
+     * @param  Everyman\Neo4j\Node   user_node
+     *
+     * @return row| null
+     */
     public function getDirectsUsers($user_node)
     {
         $id = $user_node->getId();
@@ -309,12 +316,13 @@ class GroupHierarchyManager
         }
     }
 
-	/**
-	 * Get groups subordinates to the group to which the user ($user_node) belongs
-	 *
-	 * @param  Everyman\Neo4j\Node   user_node
-	 * @return Everyman\Neo4j\Query\Row | null
-	 */
+    /**
+     * Get groups subordinates to the group to which the user ($user_node) belongs.
+     *
+     * @param  Everyman\Neo4j\Node   user_node
+     *
+     * @return Everyman\Neo4j\Query\Row | null
+     */
     public function getDirectsGroups($user_node)
     {
         $id = $user_node->getId();
@@ -335,12 +343,13 @@ class GroupHierarchyManager
         }
     }
 
-	/**
-	 * Get managers of given group node
-	 *
-	 * @param  Everyman\Neo4j\Node   group_node
-	 * @return array
-	 */
+    /**
+     * Get managers of given group node.
+     *
+     * @param  Everyman\Neo4j\Node   group_node
+     *
+     * @return array
+     */
     public function getManagersOfGroup($group_node)
     {
         $id = $group_node->getId();
@@ -359,12 +368,13 @@ class GroupHierarchyManager
         return $manager_user_array;
     }
 
-	/**
-	 * Get members of given group (user nodes found in a relation with group node)
-	 *
-	 * @param  Everyman\Neo4j\Node   group_node
-	 * @return array
-	 */
+    /**
+     * Get members of given group (user nodes found in a relation with group node).
+     *
+     * @param  Everyman\Neo4j\Node   group_node
+     *
+     * @return array
+     */
     public function getMembersOfGroup($group_node)
     {
         $id = $group_node->getId();
@@ -383,12 +393,13 @@ class GroupHierarchyManager
         return $members_array;
     }
 
-	/**
-	 * Return a list of groups subordinates to the given group
-	 *
-	 * @param  Everyman\Neo4j\Node   group_node
-	 * @return array
-	 */
+    /**
+     * Return a list of groups subordinates to the given group.
+     *
+     * @param  Everyman\Neo4j\Node   group_node
+     *
+     * @return array
+     */
     public function getGroupsDirectsOfGroup($group_node)
     {
         $id = $group_node->getId();
@@ -405,21 +416,22 @@ class GroupHierarchyManager
 
         return $groups_array;
     }
-	
+
     /**
      *  Get direct manager. If the user itself is manager  or if the group to which the user belongs   *  does not have a manager search in hierarchy for first manager.
      *  If the user is not manager and the group to which he belongs has a manager, return it.
-	 *
-	 *  @param   Everyman\Neo4j\Node           start_node
+     *
+     *  @param   Everyman\Neo4j\Node           start_node
      *  @param   Everyman\Neo4j\Node           end_node
-	 *  @return  Everyman\Neo4j\Node | null
+     *
+     *  @return  Everyman\Neo4j\Node | null
      */
     public function getManagerOfUser($user_node)
     {
         $id = $user_node->getId();
 
         //first if the group where the user belongs(default rel) has manager, not including himself if the user is manager in that group " x <> n"
-        $queryString =  ' MATCH n-[rel:'.$this->defRelTypeUserToGroup.']->group '.
+        $queryString = ' MATCH n-[rel:'.$this->defRelTypeUserToGroup.']->group '.
                         ' WHERE id(n)='.$id.' '.
                         ' WITH group,n '.
                         ' MATCH x-[rel:'.$this->defRelTypeUserToGroup.']->group '.
@@ -455,10 +467,11 @@ class GroupHierarchyManager
     }
 
     /**
-	 *  Get all relations between two nodes
-	 *	 
-	 *  @param  Everyman\Neo4j\Node   start_node
+     *  Get all relations between two nodes.
+     *	 
+     *  @param  Everyman\Neo4j\Node   start_node
      *  @param  Everyman\Neo4j\Node   end_node
+     *
      *  @return  array | null
      */
     public function getAllRelationsBetween2Nodes($start_node, $end_node)
@@ -487,12 +500,13 @@ class GroupHierarchyManager
     }
 
     /**
-     * Get relation of a certain types between two given nodes
-	 *
-	 *  @param  Everyman\Neo4j\Node   start_node
+     * Get relation of a certain types between two given nodes.
+     *
+     *  @param  Everyman\Neo4j\Node   start_node
      *  @param  Everyman\Neo4j\Node   end_node
-	 *  @param  string                relation_type
-	 * @return  array | null
+     *  @param  string                relation_type
+     *
+     * @return array | null
      */
     public function getRelationsOfType($start_node, $end_node, $relation_type)
     {
@@ -519,13 +533,14 @@ class GroupHierarchyManager
         }
     }
 
-	/**
-     * Get relation of a certain types between two given nodes
-	 *
-	 *  @param  Everyman\Neo4j\Node   start_node
+    /**
+     * Get relation of a certain types between two given nodes.
+     *
+     *  @param  Everyman\Neo4j\Node   start_node
      *  @param  Everyman\Neo4j\Node   end_node
-	 *  @param  string                rel_type
-	 *  @return  array | null
+     *  @param  string                rel_type
+     *
+     *  @return  array | null
      */
     public function checkIfRelationExists($start_node, $end_node, $rel_type)
     {
@@ -545,11 +560,12 @@ class GroupHierarchyManager
         return $flag;
     }
 
-	/**
-     * Get all labels of a node
-	 *
-	 * @param  Everyman\Neo4j\Node   node
-	 * @return  array | null
+    /**
+     * Get all labels of a node.
+     *
+     * @param  Everyman\Neo4j\Node   node
+     *
+     * @return array | null
      */
     public function getLabelsOfNode(Node $node)
     {
@@ -557,11 +573,12 @@ class GroupHierarchyManager
     }
 
     /**
-	 *  Create node
-	 *
+     *  Create node.
+     *
      *  @param   array                properties
      *  @param   array                labels_text
-	 *  @return  Everyman\Neo4j\Node
+     *
+     *  @return  Everyman\Neo4j\Node
      */
     public function createNode($properties, $labels_text)
     {
@@ -581,9 +598,9 @@ class GroupHierarchyManager
     }
 
     /**
-	 *  Update node
-	 *
-	 *  @param  Everyman\Neo4j\Node   node
+     *  Update node.
+     *
+     *  @param  Everyman\Neo4j\Node   node
      *  @param  array                 properties
      *  @param  array                 labels_text
      */
@@ -609,12 +626,11 @@ class GroupHierarchyManager
         return $node;
     }
 
-
-	/**
-	 *  Creates relationship only if does not exist already
-     *  Returns number of created relationships
-	 *
-	 *  @param  Everyman\Neo4j\Node   node
+    /**
+     *  Creates relationship only if does not exist already
+     *  Returns number of created relationships.
+     *
+     *  @param  Everyman\Neo4j\Node   node
      *  @param  array                 properties
      *  @param  array                 labels_text
      */
@@ -640,40 +656,39 @@ class GroupHierarchyManager
         return $counter;
     }
 
-	/**
-	 *  @TODO: remove and use the delete function from  Everyman\Neo4j\Node
-	 *
-	 *  @param  string   id
+    /**
+     *  @TODO: remove and use the delete function from  Everyman\Neo4j\Node
+     *
+     *  @param  string   id
      */
     public function deleteRelationById($id)
     {
         $relation = $this->client->getRelationship($id);
         $relation->delete();
     }
-	
-	/**
-	 *  Delete relations of a given type between 2 nodes
-	 *
-	 *  @param  Everyman\Neo4j\Node   startNode
-	 *  @param  Everyman\Neo4j\Node   endNode
-	 *  @param  Everyman\Neo4j\Node   relationType
+
+    /**
+     *  Delete relations of a given type between 2 nodes.
+     *
+     *  @param  Everyman\Neo4j\Node   startNode
+     *  @param  Everyman\Neo4j\Node   endNode
+     *  @param  Everyman\Neo4j\Node   relationType
      */
-	public function deleteRelations($startNode, $endNode, $relationType)
+    public function deleteRelations($startNode, $endNode, $relationType)
     {
-		$queryString = ' MATCH start-[rel:'. $relationType .']->end ' .
-		               ' WHERE id(start)='. $startNode->getId() .
-					   ' AND id(end)='. $endNode->getId() .
+        $queryString = ' MATCH start-[rel:'.$relationType.']->end '.
+                       ' WHERE id(start)='.$startNode->getId().
+                       ' AND id(end)='.$endNode->getId().
                        ' DELETE rel';
 
         $query = new Query($this->client, $queryString);
         $query->getResultSet();
-
     }
 
     /**
-	 *  Delete node and any IN or OUT relations using cypher query DETACH DELETE
-	 *
-	 *  @param  Everyman\Neo4j\Node   node
+     *  Delete node and any IN or OUT relations using cypher query DETACH DELETE.
+     *
+     *  @param  Everyman\Neo4j\Node   node
      */
     public function deleteNode($node)
     {
@@ -685,12 +700,12 @@ class GroupHierarchyManager
         $query = new Query($this->client, $queryString);
         $query->getResultSet();
     }
-    
+
     /**
-	 *  Remove node and update hierarchy. This means that the incoming relations to the deleted node
-	 *  will point to the father node 
-	 *
-	 *  @param  Everyman\Neo4j\Node   node
+     *  Remove node and update hierarchy. This means that the incoming relations to the deleted node
+     *  will point to the father node.
+     *
+     *  @param  Everyman\Neo4j\Node   node
      */
     public function removeNodeWithHierarchyUpdate($node)
     {
@@ -725,11 +740,11 @@ class GroupHierarchyManager
         $this->createRelations($children_nodes, $father_node, $this->default_relation_type);
     }
 
-	/**
-	 *  New node will take the exact position in hierarchy of the old node. The old node will not be
-	 *  deleted, only it's relations will be deleted
-	 *
-	 *  @param  Everyman\Neo4j\Node   node
+    /**
+     *  New node will take the exact position in hierarchy of the old node. The old node will not be
+     *  deleted, only it's relations will be deleted.
+     *
+     *  @param  Everyman\Neo4j\Node   node
      */
     public function replaceNodeInHierarchy($old_node, $new_node)
     {
@@ -755,13 +770,13 @@ class GroupHierarchyManager
         }
     }
 
-	/**
-	 *  Insert a node between two nodes 
-	 *
-	 *  @param  Everyman\Neo4j\Node   new_node
-	 *  @param  Everyman\Neo4j\Node   old_node
-	 *  @param  Everyman\Neo4j\Node   old_end_node
-	 *  @param  string                rel_type
+    /**
+     *  Insert a node between two nodes.
+     *
+     *  @param  Everyman\Neo4j\Node   new_node
+     *  @param  Everyman\Neo4j\Node   old_node
+     *  @param  Everyman\Neo4j\Node   old_end_node
+     *  @param  string                rel_type
      */
     public function insertNodeBetween2Nodes($new_node, $old_start_node, $old_end_node, $rel_type = null)
     {
@@ -789,11 +804,11 @@ class GroupHierarchyManager
     }
 
     /**
-	 *  If rel_type is missing default relation type will be used.
-	 *
-	 *  @param  Everyman\Neo4j\Node   new_node
-	 *  @param  Everyman\Neo4j\Node   superior_node
-	 *  @param  string                rel_type
+     *  If rel_type is missing default relation type will be used.
+     *
+     *  @param  Everyman\Neo4j\Node   new_node
+     *  @param  Everyman\Neo4j\Node   superior_node
+     *  @param  string                rel_type
      */
     public function insertTerminalNode($new_node, $superior_node, $rel_type = null)
     {
@@ -807,12 +822,13 @@ class GroupHierarchyManager
         $this->createRelations($start_nodes_array, $superior_node, $this->default_relation_type);
     }
 
-	/**
-	 *  Get hierarchy above node
-	 *
-	 *  @param  Everyman\Neo4j\Node   node
-	 *  @param  string                rel_type
-	 *  @return array
+    /**
+     *  Get hierarchy above node.
+     *
+     *  @param  Everyman\Neo4j\Node   node
+     *  @param  string                rel_type
+     *
+     *  @return array
      */
     public function getHierarchyAboveNode($node, $rel_type)
     {
@@ -825,12 +841,13 @@ class GroupHierarchyManager
         return $paths[0]->getNodes();
     }
 
-	/**
-	 *  Get child nodes of a node
-	 *
-	 *  @param  Everyman\Neo4j\Node   node
-	 *  @param  string                rel_type
-	 *  @return array | null
+    /**
+     *  Get child nodes of a node.
+     *
+     *  @param  Everyman\Neo4j\Node   node
+     *  @param  string                rel_type
+     *
+     *  @return array | null
      */
     public function getDirectNodesBelow($node, $rel_type)
     {
@@ -848,13 +865,14 @@ class GroupHierarchyManager
             return;
         }
     }
-	
-	/**
-	 *  Search users by property
-	 *
-	 *  @param  string                            search_value
-	 *  @param  string                            property
-	 *  @return Everyman\Neo4j\ResultSet  | null
+
+    /**
+     *  Search users by property.
+     *
+     *  @param  string                            search_value
+     *  @param  string                            property
+     *
+     *  @return Everyman\Neo4j\ResultSet  | null
      */
     public function searchUsersByProperty($search_value, $property)
     {
@@ -872,12 +890,13 @@ class GroupHierarchyManager
         }
     }
 
-	/**
-	 *  Search groups by property
-	 *
-	 *  @param  string                            search_value
-	 *  @param  string                            property
-	 *  @return Everyman\Neo4j\ResultSet  | null
+    /**
+     *  Search groups by property.
+     *
+     *  @param  string                            search_value
+     *  @param  string                            property
+     *
+     *  @return Everyman\Neo4j\ResultSet  | null
      */
     public function searchGroupByProperty($search_value, $property)
     {
@@ -894,68 +913,68 @@ class GroupHierarchyManager
             return;
         }
     }
-	
-	/**
-	 *  Create new group node
-	 *
-	 *  @param  string  propertiesArray
+
+    /**
+     *  Create new group node.
+     *
+     *  @param  string  propertiesArray
      */
     public function createGroup($propertiesArray)
     {
         $groupNode = $this->client->makeNode();
-		
-		foreach ($propertiesArray as $key => $value) {
-			$groupNode->setProperty($key, $value);
-		}
-		$savedNode = $groupNode->save();
 
-		$label = $this->client->makeLabel('Group');
-		$savedNode->addLabels(array($label));	
+        foreach ($propertiesArray as $key => $value) {
+            $groupNode->setProperty($key, $value);
+        }
+        $savedNode = $groupNode->save();
+
+        $label = $this->client->makeLabel('Group');
+        $savedNode->addLabels(array($label));
     }
-	
+
     /**
-	 *  Create new user node
-	 *
-	 *  @param  string    propertiesArray
+     *  Create new user node.
+     *
+     *  @param  string    propertiesArray
      */
     public function createUser($propertiesArray)
     {
         $groupNode = $this->client->makeNode();
-		
-		foreach ($propertiesArray as $key => $value) {
-			$groupNode->setProperty($key, $value);
-		}
-		$savedNode = $groupNode->save();
 
-		$label = $this->client->makeLabel('User');
-		$savedNode->addLabels(array($label));	
+        foreach ($propertiesArray as $key => $value) {
+            $groupNode->setProperty($key, $value);
+        }
+        $savedNode = $groupNode->save();
+
+        $label = $this->client->makeLabel('User');
+        $savedNode->addLabels(array($label));
     }
-	
-	/**
-	 *  Edit group property
-	 *
-	 *  @param  Everyman\Neo4j\Node        groupNode
-	 *  @param  array                      propertiesArray
+
+    /**
+     *  Edit group property.
+     *
+     *  @param  Everyman\Neo4j\Node        groupNode
+     *  @param  array                      propertiesArray
      */
     public function editGroupProperty($groupNode, $propertiesArray)
-    {	
-		foreach ($propertiesArray as $key => $value) {
-			$groupNode->setProperty($key, $value);
-		}
-		$savedNode = $groupNode->save();	
+    {
+        foreach ($propertiesArray as $key => $value) {
+            $groupNode->setProperty($key, $value);
+        }
+        $savedNode = $groupNode->save();
     }
-	
-	/**
-	 *  Edit Relation property
-	 *
-	 *  @param  Everyman\Neo4j\Relationship        relation
-	 *  @param  array                              propertiesArray
+
+    /**
+     *  Edit Relation property.
+     *
+     *  @param  Everyman\Neo4j\Relationship        relation
+     *  @param  array                              propertiesArray
      */
     public function editRelationProperty($relation, $propertiesArray)
-    {	
-		foreach ($propertiesArray as $key => $value) {
-			$relation->setProperty($key, $value);
-		}
-		$savedNode = $relation->save();	
+    {
+        foreach ($propertiesArray as $key => $value) {
+            $relation->setProperty($key, $value);
+        }
+        $savedNode = $relation->save();
     }
 }

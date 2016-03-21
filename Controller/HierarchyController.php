@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This controller contains actions for regular user who can just browse throuh hierarchy
- * It is using the class GroupHierarchyManager by accessing the service 'group_hierarchy_manager_neo4j' 
+ * It is using the class GroupHierarchyManager by accessing the service 'group_hierarchy_manager_neo4j'.
  *
  * @author Cristian Pana  <cristianpana86@yahoo.com>
  */
@@ -36,23 +36,23 @@ class HierarchyController extends Controller
             $searched_word = $form['search']->getData();
 
             $hm = $this->get('group_hierarchy_manager_neo4j');
-            $rows = $hm->searchUsersByProperty($searched_word, $hm->getDefaultPropertyUser() );
+            $rows = $hm->searchUsersByProperty($searched_word, $hm->getDefaultPropertyUser());
             if ($rows != null) {
-                return $this->render('CPANAHierarchyBundle:Default:index.html.twig', 
-								array(
-									'form' => $form->createView(),
-									'form_g' => $form_g->createView(), 
-									'rows' => $rows,
-									'default_value_user' => $hm->getDefaultPropertyUser(),
-								));
+                return $this->render('CPANAHierarchyBundle:Default:index.html.twig',
+                                array(
+                                    'form' => $form->createView(),
+                                    'form_g' => $form_g->createView(),
+                                    'rows' => $rows,
+                                    'default_value_user' => $hm->getDefaultPropertyUser(),
+                                ));
             } else {
-                return $this->render('CPANAHierarchyBundle:Default:index.html.twig', 
-								array(
-									'form' => $form->createView(),
-									'form_g' => $form_g->createView(),
-									'message' => "The user: $searched_word was not found!",
-									'default_value_user' => $hm->getDefaultPropertyUser(),
-								));
+                return $this->render('CPANAHierarchyBundle:Default:index.html.twig',
+                                array(
+                                    'form' => $form->createView(),
+                                    'form_g' => $form_g->createView(),
+                                    'message' => "The user: $searched_word was not found!",
+                                    'default_value_user' => $hm->getDefaultPropertyUser(),
+                                ));
             }
         }
 
@@ -62,31 +62,32 @@ class HierarchyController extends Controller
             $hm = $this->get('group_hierarchy_manager_neo4j');
             $rows = $hm->searchGroupByProperty($searched_word, $hm->getDefaultPropertyGroup());
             if ($rows != null) {
-                return $this->render('CPANAHierarchyBundle:Default:index.html.twig', 
-								array(
-									'form' => $form->createView(),
-									'form_g' => $form_g->createView(),
-									'rows_g' => $rows,
-									'default_value_group' => $hm->getDefaultPropertyGroup(),
-								));
+                return $this->render('CPANAHierarchyBundle:Default:index.html.twig',
+                                array(
+                                    'form' => $form->createView(),
+                                    'form_g' => $form_g->createView(),
+                                    'rows_g' => $rows,
+                                    'default_value_group' => $hm->getDefaultPropertyGroup(),
+                                ));
             } else {
                 return $this->render('CPANAHierarchyBundle:Default:index.html.twig',
-								array(
-									'form' => $form->createView(),
-									'form_g' => $form_g->createView(),
-									'message_g' => "The group: $searched_word was not found!",
-									'default_value_group' => $hm->getDefaultPropertyGroup(),
-								));
+                                array(
+                                    'form' => $form->createView(),
+                                    'form_g' => $form_g->createView(),
+                                    'message_g' => "The group: $searched_word was not found!",
+                                    'default_value_group' => $hm->getDefaultPropertyGroup(),
+                                ));
             }
         }
-		
-		$hm = $this->get('group_hierarchy_manager_neo4j');
+
+        $hm = $this->get('group_hierarchy_manager_neo4j');
+
         return $this->render('CPANAHierarchyBundle:Default:index.html.twig',
-						array(
-							'form' => $form->createView(),
-							'form_g' => $form_g->createView(),
-							'default_value_group' => $hm->getDefaultPropertyGroup(),
-						));
+                        array(
+                            'form' => $form->createView(),
+                            'form_g' => $form_g->createView(),
+                            'default_value_group' => $hm->getDefaultPropertyGroup(),
+                        ));
     }
 
     /**
@@ -143,7 +144,7 @@ class HierarchyController extends Controller
 
             return $this->render('CPANAHierarchyBundle:Default:show_user.html.twig',
                             array(
-						         'node' => $node,
+                                 'node' => $node,
                                  'current_group' => $current_group,
                                  'manager' => $direct_manager,
                                  'all_managers' => $all_managers_above,
@@ -157,8 +158,8 @@ class HierarchyController extends Controller
         } else {
             return $this->render('CPANAHierarchyBundle:Error:error_user.html.twig',
                             array(
-							    'id' => $node_id,
-						    ));
+                                'id' => $node_id,
+                            ));
         }
     }
 
@@ -182,7 +183,7 @@ class HierarchyController extends Controller
             } else {
                 array_push($groups_hierarchy_array, $group_node);
             }
-			
+
             $part_of_group = $groups_hierarchy_array[1];
             $groups_hierarchy_array = array_reverse($groups_hierarchy_array);
         } else {
@@ -194,8 +195,8 @@ class HierarchyController extends Controller
         $groups_members = $hm->getGroupsDirectsOfGroup($group_node);
 
         return $this->render('CPANAHierarchyBundle:Default:show_group.html.twig',
-						array(
-						     'node' => $group_node,
+                        array(
+                             'node' => $group_node,
                              'managers' => $group_managers,
                              'part_of_group' => $part_of_group,
                              'groups_hierarchy' => $groups_hierarchy_array,
@@ -218,10 +219,10 @@ class HierarchyController extends Controller
 
         $rows = $hm->getManagerOfUser($node);
 
-        return $this->render('CPANAHierarchyBundle:Default:managers.html.twig', 
-						array(
-							'result' => $rows,
-						));
+        return $this->render('CPANAHierarchyBundle:Default:managers.html.twig',
+                        array(
+                            'result' => $rows,
+                        ));
     }
 
     /**
@@ -236,9 +237,9 @@ class HierarchyController extends Controller
 
         $rows = $hm->getManagerOfUser($node);
 
-        return $this->render('CPANAHierarchyBundle:Default:managers.html.twig', 
-						array(
-							'result' => $rows,
-						));
+        return $this->render('CPANAHierarchyBundle:Default:managers.html.twig',
+                        array(
+                            'result' => $rows,
+                        ));
     }
 }
