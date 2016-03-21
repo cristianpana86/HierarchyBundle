@@ -52,4 +52,8 @@ In your browser type your project path and add **app_dev.php/h/admin/home**. If 
 
 ![admin](https://1.bp.blogspot.com/-8jK5fy3mgz8/Vu7aMfthDMI/AAAAAAAACWk/Wwh552iscncaBgbIxpkoO-8xwktElqpIQ/s640/admin_peter.PNG)
 
+**TO DO:**
+1. Write tests
+2. Handle nodes with 2 fathers
+
 
